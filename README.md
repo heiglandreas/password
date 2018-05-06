@@ -2,7 +2,7 @@
 
 An Object for passwords - Stop leaking passwords to logs or stacktraces!
 
-## Wyh?
+## Why?
 
 The discussions that spun up around twitter leaking passwords to logfiles left me thinking.
 
@@ -13,7 +13,7 @@ won't accidentaly leak it.
 
 ## Installation
 
-THis is best installed using composer like this:
+This is best installed using composer like this:
 
 ```bash
 composer require org_heigl/password
