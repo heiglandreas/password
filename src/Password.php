@@ -65,7 +65,7 @@ final class Password
 
     public function getNewHash(int $algorithm = PASSWORD_DEFAULT, array $options = []) : string
     {
-        return password_hash($this->password, $algorithm, $options);
+        return password_hash($this->getPasswordInPlainText(), $algorithm, $options);
     }
 
     public function getPlainTextPasswordAndYesIKnowWhatIAmDoingHere() : string
@@ -85,6 +85,32 @@ final class Password
             ORG_HEIGL_PASSWORD_PASSWORD_NONCE,
             ORG_HEIGL_PASSWORD_PASSWORD_KEY
         );
+    }
+
+    /**
+     * @throws \Org_Heigl\Password\PasswordException
+     */
+    public function __wakeup() : void
+    {
+        throw PasswordException::getWakeupException();
+    }
+
+    /**
+     * @throws \Org_Heigl\Password\PasswordException
+     */
+    public function __sleep() : array
+    {
+        throw PasswordException::getSleepException();
+
+        return [];
+    }
+
+    /**
+     * @throws \Org_Heigl\Password\PasswordException
+     */
+    public function __clone()
+    {
+        throw PasswordException::getCloneException();
     }
 }
 

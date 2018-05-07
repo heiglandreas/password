@@ -27,12 +27,13 @@
  * @link      http://github.com/heiglandreas/password
  */
 
-namespace Org_Heigl\PaswordTest;
+namespace Org_Heigl\PasswordTest;
 
+use Closure;
 use Org_Heigl\Password\Password;
+use Org_Heigl\Password\PasswordException;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
-use Closure;
 use ReflectionProperty;
 
 class PasswordTest extends TestCase
@@ -91,7 +92,8 @@ class PasswordTest extends TestCase
 
     public function testGetNewHash()
     {
-
+        $password = Password::createFromPlainText('test');
+        self::assertTrue(password_verify('test', $password->getNewHash()));
     }
 
     public function testDoesNotLeakPasswordThroughPrintR()
@@ -145,5 +147,35 @@ class PasswordTest extends TestCase
         self::assertNotEquals('testPassword', $keylogger->getValue($password));
     }
 
+    public function testJsonSerializeDoesntLeak()
+    {
+        $password = Password::createFromPlainText('testPassword');
 
+        self::assertEquals('{}', json_encode($password));
+    }
+
+    public function testSerializingThowsUp()
+    {
+        self::expectException(PasswordException::class);
+        self::expectExceptionMessage('This object can not be serialized');
+
+        $password = Password::createFromPlainText('testPassword');
+        serialize($password);
+    }
+
+    public function testDeserializingThowsUp()
+    {
+        self::expectException(PasswordException::class);
+        self::expectExceptionMessage('This object can not be deserialized');
+
+        unserialize('O:27:"Org_Heigl\Password\Password":0:{}');
+    }
+
+    public function testCloningThrowsUp()
+    {
+        self::expectException(PasswordException::class);
+        self::expectExceptionMessage('This object can not be cloned');
+
+        clone Password::createFromPlainText('testPassword');
+    }
 }
