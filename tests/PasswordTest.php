@@ -30,8 +30,10 @@
 namespace Org_Heigl\PaswordTest;
 
 use Org_Heigl\Password\Password;
+use PHPUnit\Framework\Error\Warning;
+use PHPUnit\Framework\TestCase;
 
-class PasswordTest extends \PHPUnit_Framework_TestCase
+class PasswordTest extends TestCase
 {
 
     public function testShouldBeRehashed()
@@ -52,7 +54,15 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     {
         $password = Password::createFromPlainText('test');
 
-        self::assertSame('test', $password->getPlainTextPasswordAndYesIKnowWhatIAmDoingHere());
+        self::assertSame('test', @$password->getPlainTextPasswordAndYesIKnowWhatIAmDoingHere());
+    }
+
+    public function testGetPlainTextPasswordAndYesIKnowWhatIAmDoingHereTriggersWarning()
+    {
+        $password = Password::createFromPlainText('test');
+
+        $this->expectException(Warning::class);
+        $password->getPlainTextPasswordAndYesIKnowWhatIAmDoingHere();
     }
 
     public function testMatchesHash()
@@ -64,7 +74,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     {
         $password = Password::createFromPlainText('test');
 
-        self::assertAttributeSame('tests', 'password', $password);
+        self::assertAttributeSame('test', 'password', $password);
         self::assertAttributeSame(null, 'hash', $password);
     }
 
