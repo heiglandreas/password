@@ -33,6 +33,13 @@ class Password
         return '********';
     }
 
+    public function __debugInfo()
+    {
+        return [
+            'password' => '********'
+        ];
+    }
+
     public function matchesHash(string $hash) : bool
     {
         $this->hash = $hash;
