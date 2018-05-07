@@ -22,12 +22,12 @@
             "Org_Heigl\\Password\\" : "src/"
         }
     },
-    "extras" : {
-        "autoload-dev": {
-            "psr-4": {
-                "Org_Heigl\\PasswordTest\\": "tests/"
-            }
-        },
+    "autoload-dev": {
+        "psr-4": {
+            "Org_Heigl\\PasswordTest\\": "tests/"
+        }
+    },
+    "extra" : {
         "tools": {
             "phpcs": {
                 "url": "https://api.getlatestassets.com/github/squizlabs/PHP_CodeSniffer/phpcs.phar",
