@@ -85,19 +85,19 @@ class PasswordTest extends TestCase
 
     public function testDoesNotLeakPasswordThroughPrintR()
     {
-        $password = Password::createFromPlainText('test');
+        $password = Password::createFromPlainText('testPassword');
 
-        self::assertNotContains('test', print_r($password, true));
+        self::assertNotContains('testPassword', print_r($password, true));
     }
 
     public function testDoesNotLeakPasswordThroughVarDump()
     {
-        $password = Password::createFromPlainText('test');
+        $password = Password::createFromPlainText('testPassword');
 
         ob_start();
         var_dump($password);
         $output = ob_get_clean();
 
-        self::assertNotContains('test', $output);
+        self::assertNotContains('testPassword', $output);
     }
 }
