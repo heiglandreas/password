@@ -32,6 +32,8 @@ namespace Org_Heigl\PaswordTest;
 use Org_Heigl\Password\Password;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
+use Closure;
+use ReflectionProperty;
 
 class PasswordTest extends TestCase
 {
@@ -74,7 +76,13 @@ class PasswordTest extends TestCase
     {
         $password = Password::createFromPlainText('test');
 
-        self::assertAttributeSame('test', 'password', $password);
+        $encrypted = sodium_crypto_secretbox(
+            'test',
+            ORG_HEIGL_PASSWORD_PASSWORD_NONCE,
+            ORG_HEIGL_PASSWORD_PASSWORD_KEY
+        );
+
+        self::assertAttributeSame($encrypted, 'password', $password);
         self::assertAttributeSame(null, 'hash', $password);
     }
 
@@ -100,4 +108,39 @@ class PasswordTest extends TestCase
 
         self::assertNotContains('testPassword', $output);
     }
+
+    public function testDoesNotLeakPasswordThroughArrayConversion()
+    {
+        $password = Password::createFromPlainText('testPassword');
+
+        $output = (array) $password;
+
+        self::assertNotContains('testPassword', $output);
+    }
+
+    public function testDoesNotLeakPasswordThroughClosureBinding()
+    {
+        $password = Password::createFromPlainText('testPassword');
+
+        $keylogger = function (Password $password) {
+            return $password->password;
+        };
+
+        $keylogger = Closure::bind($keylogger, null, $password);
+
+        self::assertNotEquals('testPassword', $keylogger($password));
+    }
+
+    public function testDoesNotLeakPasswordThroughReflection()
+    {
+        $password = Password::createFromPlainText('testPassword');
+
+        $keylogger = new ReflectionProperty(Password::class, 'password');
+
+        $keylogger->setAccessible(true);
+
+        self::assertNotEquals('testPassword', $keylogger->getValue($password));
+    }
+
+
 }

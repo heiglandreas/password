@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Org_Heigl\Password;
 
-class Password
+final class Password
 {
     private $password;
 
@@ -19,8 +19,12 @@ class Password
 
     private function __construct(string $password)
     {
-        $this->password = $password;
         $this->hash = null;
+        $this->password = sodium_crypto_secretbox(
+            $password,
+            ORG_HEIGL_PASSWORD_PASSWORD_NONCE,
+            ORG_HEIGL_PASSWORD_PASSWORD_KEY
+        );
     }
 
     public static function createFromPlainText(string $password) : self
@@ -44,7 +48,10 @@ class Password
     {
         $this->hash = $hash;
 
-        return password_verify($this->password, $this->hash);
+        return password_verify(
+            $this->getPasswordInPlainText(),
+            $this->hash
+        );
     }
 
     public function shouldBeRehashed(int $algorithm = PASSWORD_DEFAULT, array $options = []) : bool
@@ -68,6 +75,18 @@ class Password
             E_USER_WARNING
         );
 
-        return $this->password;
+        return $this->getPasswordInPlainText();
+    }
+
+    private function getPasswordInPlainText() : string
+    {
+        return sodium_crypto_secretbox_open(
+            $this->password,
+            ORG_HEIGL_PASSWORD_PASSWORD_NONCE,
+            ORG_HEIGL_PASSWORD_PASSWORD_KEY
+        );
     }
 }
+
+define ('ORG_HEIGL_PASSWORD_PASSWORD_NONCE', random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES));
+define ('ORG_HEIGL_PASSWORD_PASSWORD_KEY', sodium_crypto_secretbox_keygen());
