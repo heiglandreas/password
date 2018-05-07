@@ -46,7 +46,7 @@ class PasswordTest extends TestCase
         self::assertTrue($password->shouldBeRehashed());
     }
 
-    public function test__toString()
+    public function testToString()
     {
         $password = Password::createFromPlainText('test');
 

@@ -71,7 +71,8 @@ final class Password
     public function getPlainTextPasswordAndYesIKnowWhatIAmDoingHere() : string
     {
         trigger_error(
-            'Password was leaked in clear text using the "Password::getPlainTextPasswordAndYesIKnowWhatIAmDoingHere"-function!!',
+            'Password was leaked in clear text using the ' .
+            '"Password::getPlainTextPasswordAndYesIKnowWhatIAmDoingHere"-function!!',
             E_USER_WARNING
         );
 
@@ -114,5 +115,5 @@ final class Password
     }
 }
 
-define ('ORG_HEIGL_PASSWORD_PASSWORD_NONCE', random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES));
-define ('ORG_HEIGL_PASSWORD_PASSWORD_KEY', sodium_crypto_secretbox_keygen());
+define('ORG_HEIGL_PASSWORD_PASSWORD_NONCE', random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES));
+define('ORG_HEIGL_PASSWORD_PASSWORD_KEY', sodium_crypto_secretbox_keygen());
