@@ -69,7 +69,10 @@ class PasswordTest extends TestCase
 
     public function testMatchesHash()
     {
+        $password = Password::createFromPlainText('test');
 
+        self::assertFalse($password->matchesHash(password_hash('test1', PASSWORD_DEFAULT)));
+        self::assertTrue($password->matchesHash(password_hash('test', PASSWORD_DEFAULT)));
     }
 
     public function testCreateFromPlainText()

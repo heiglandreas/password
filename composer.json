@@ -3,7 +3,8 @@
     "description": "An Object for passwords - Stop leaking passwords to logs or stacktraces!",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^7.1"
+        "phpunit/phpunit": "^7.1",
+        "tm/tooly-composer-script": "^1.2"
     },
     "license": "MIT",
     "authors": [
@@ -21,9 +22,30 @@
             "Org_Heigl\\Password\\" : "src/"
         }
     },
-    "autoload-dev" : {
-        "psr-4" : {
-            "Org_Heigl\\PasswordTest\\" : "tests/"
+    "extras" : {
+        "autoload-dev": {
+            "psr-4": {
+                "Org_Heigl\\PasswordTest\\": "tests/"
+            }
+        },
+        "tools": {
+            "phpcs": {
+                "url": "https://api.getlatestassets.com/github/squizlabs/PHP_CodeSniffer/phpcs.phar",
+                "sign-url": "https://api.getlatestassets.com/github/squizlabs/PHP_CodeSniffer/phpcs.phar.asc"
+            }
         }
+    },
+    "scripts": {
+        "test-junitdiff": "phpunit --color --coverage-text --coverage-clover clover.xml --log-junit junitlogs/`git rev-parse HEAD`.log",
+        "post-install-cmd": "Tooly\\ScriptHandler::installPharTools",
+        "post-update-cmd": "Tooly\\ScriptHandler::installPharTools",
+        "cs-check": "./vendor/bin/phpcs.phar --version && ./vendor/bin/phpcs.phar",
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-clover clover.xml",
+        "upload-coverage": [
+            "curl -o coveralls -L api.getlatestassets.com/github/php-coveralls/php-coveralls/php-coveralls.phar",
+            "chmod 755 coveralls",
+            "./coveralls -v"
+        ]
     }
 }
