@@ -178,4 +178,13 @@ class PasswordTest extends TestCase
 
         clone Password::createFromPlainText('testPassword');
     }
+
+    public function testShouldBeReallyRehashed()
+    {
+        $password = Password::createFromPlainText('test');
+
+        $password->matchesHash($password->matchesHash(password_hash('test', PASSWORD_DEFAULT)));
+
+        self::assertTrue($password->shouldBeRehashed(PASSWORD_DEFAULT, ['cost' => 11]));
+    }
 }
