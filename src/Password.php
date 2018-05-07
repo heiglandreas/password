@@ -30,7 +30,7 @@ class Password
 
     public function __toString()
     {
-        return '*******';
+        return '********';
     }
 
     public function matchesHash(string $hash) : bool
