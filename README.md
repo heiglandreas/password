@@ -2,11 +2,20 @@
 
 An Object for passwords - Stop leaking passwords to logs or stacktraces!
 
+[![Build Status](https://travis-ci.org/heiglandreas/password.svg?branch=master)](https://travis-ci.org/heiglandreas/password)
+[![Coverage Status](https://coveralls.io/repos/github/heiglandreas/password/badge.svg)](https://coveralls.io/github/heiglandreas/password)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/heiglandreas/password/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/heiglandreas/password/?branch=master)
+
+[![License](https://poser.pugx.org/org_heigl/password/license)](https://packagist.org/packages/org_heigl/password)
+[![Latest Stable Version](https://poser.pugx.org/org_heigl/password/v/stable)](https://packagist.org/packages/org_heigl/password)
+[![Total Downloads](https://poser.pugx.org/org_heigl/password/downloads)](https://packagist.org/packages/org_heigl/password)
+
+
 ## Scope
 
 This package contains an Object that can be used and passed just like you would
 use a plaintext-password. The only difference is that the plaintext-password will not
-be accidentaly leaked into log-files or stacktraces or var_Dump-output.
+be accidentaly leaked into log-files or stacktraces or `var_dump`-output.
 
 The scope is **not** to provide a Cryptographically Secure Password or a ValueObject
 that you can just pass to your Persistence-Layer for storage. On the contrary. **You shall
