@@ -43,6 +43,7 @@ jobs:
        - travis_retry composer upload-coverage
 
 before_install:
+  - php -m
   - travis_retry composer self-update
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
 
