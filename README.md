@@ -45,6 +45,10 @@ you put stack-traces into logs. And that brought me to thinking how to avoid tha
 accidentally. The answer to me is a vaule-object with a bit of logic that handles the password but
 won't accidentaly leak it.
 
+Just today (21st of March 2019) another leakeg of cleartext passwords was 
+announced. This time multiple 100 million accounts at facebook where leaked over multiple years.
+Read more [here](https://techcrunch.com/2019/03/21/facebook-plaintext-passwords/)
+
 ## Installation
 
 This is best installed using composer like this:
