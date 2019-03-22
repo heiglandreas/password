@@ -45,9 +45,9 @@ you put stack-traces into logs. And that brought me to thinking how to avoid tha
 accidentally. The answer to me is a vaule-object with a bit of logic that handles the password but
 won't accidentaly leak it.
 
-Just today (21st of March 2019) another leakeg of cleartext passwords was 
+Just today (21st of March 2019) another leakage of cleartext passwords was 
 announced. This time multiple 100 million accounts at facebook where leaked over multiple years.
-Read more [here](https://techcrunch.com/2019/03/21/facebook-plaintext-passwords/)
+Read more on [Krebs on Security](https://krebsonsecurity.com/2019/03/facebook-stored-hundreds-of-millions-of-user-passwords-in-plain-text-for-years/) or directly at [Facebook](https://newsroom.fb.com/news/2019/03/keeping-passwords-secure/)
 
 ## Installation
 
@@ -63,6 +63,8 @@ Instead of passing the password as a string create a Password-Object and pass th
 
 ```php
 $password = Password::createFromPlainText($request->getParam('password'));
+// Do not forget to remove the password from your request-object!!
+$request->setParam('password', '*****');
 ```
 
 You can additionally directly use PHPs password-hashing API:
