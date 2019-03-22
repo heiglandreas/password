@@ -5,6 +5,7 @@ language: php
 
 php:
  - 7.2
+ - 7.3
  - nightly
 
 env:
@@ -15,7 +16,7 @@ matrix:
   allow_failures:
       - php: nightly
   include:
-    - php: 7.2
+    - php: 7.3
       env:
         - TEST_COVERAGE=true
         - CHECK_CS=false
@@ -28,13 +29,13 @@ stages:
 jobs:
   include:
     - stage: check
-      php: 7.2
+      php: 7.3
       script:
         - composer cs-check
     - stage: test
     - stage: coverage
       if: branch = master AND type = push
-      php: 7.2
+      php: 7.3
       env: TEST_COVERAGE=true
       script: skip
       after_script:
