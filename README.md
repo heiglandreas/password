@@ -86,6 +86,16 @@ whether the password should be rehashed
 $password->shouldBeRehashed();
 ```
 
+And to be able to store the password securely in a database you can retrieve the password hashed
+using
+
+```php
+$password->hash($algorithm, $options);
+```
+
+where `$argument` and `$options` are the corresponding arguments to 
+[password_hash](https://php.net/password_hash)
+
 If you **really** need to get the plaintext password the password-object was initialized with
 (f.e. for use with ```ldap_bind```) you can do that as well:
 

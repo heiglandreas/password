@@ -3,7 +3,7 @@
     "description": "An Object for passwords - Stop leaking passwords to logs or stacktraces!",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^7.1",
+        "phpunit/phpunit": "^7.1|^8.0|^9.0",
         "tm/tooly-composer-script": "^1.2"
     },
     "license": "MIT",
@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php" : "^7.2",
+        "php" : "^7.2|^8.0",
         "ext-sodium" : "*"
     },
     "autoload" : {

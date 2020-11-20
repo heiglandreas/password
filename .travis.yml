@@ -1,4 +1,4 @@
-# Travic-CI-Config file for Manero
+# Travic-CI-Config file for Password
 #
 sudo: false
 language: php
@@ -6,6 +6,7 @@ language: php
 php:
  - 7.2
  - 7.3
+ - 7.4
  - nightly
 
 env:
@@ -16,7 +17,7 @@ matrix:
   allow_failures:
       - php: nightly
   include:
-    - php: 7.3
+    - php: 7.4
       env:
         - TEST_COVERAGE=true
         - CHECK_CS=false
@@ -29,13 +30,13 @@ stages:
 jobs:
   include:
     - stage: check
-      php: 7.3
+      php: 7.4
       script:
         - composer cs-check
     - stage: test
     - stage: coverage
       if: branch = master AND type = push
-      php: 7.3
+      php: 7.4
       env: TEST_COVERAGE=true
       script: skip
       after_script:

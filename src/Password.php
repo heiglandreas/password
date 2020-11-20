@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Org_Heigl\Password;
 
+use function define;
+use function defined;
+use const PASSWORD_DEFAULT;
+
 final class Password
 {
     private $password;
@@ -54,7 +58,7 @@ final class Password
         );
     }
 
-    public function shouldBeRehashed(int $algorithm = PASSWORD_DEFAULT, array $options = []) : bool
+    public function shouldBeRehashed(string $algorithm = PASSWORD_DEFAULT, array $options = []) : bool
     {
         if (null === $this->hash) {
             return true;
@@ -63,9 +67,14 @@ final class Password
         return password_needs_rehash($this->hash, $algorithm, $options);
     }
 
-    public function getNewHash(int $algorithm = PASSWORD_DEFAULT, array $options = []) : string
+    public function getNewHash(string $algorithm = PASSWORD_DEFAULT, array $options = []) : string
     {
         return password_hash($this->getPasswordInPlainText(), $algorithm, $options);
+    }
+
+    public function hash(string $algorithm = PASSWORD_DEFAULT, array $options = []): string
+    {
+        return $this->getNewHash($algorithm, $options);
     }
 
     public function getPlainTextPasswordAndYesIKnowWhatIAmDoingHere() : string
@@ -102,8 +111,6 @@ final class Password
     public function __sleep() : array
     {
         throw PasswordException::getSleepException();
-
-        return [];
     }
 
     /**
