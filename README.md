@@ -2,6 +2,7 @@
 
 An Object for passwords - Stop leaking passwords to logs or stacktraces!
 
+[![Password-Workflow](https://github.com/heiglandreas/password/workflows/Password-Workflow/badge.svg)](https://github.com/heiglandreas/password/actions)
 [![Build Status](https://travis-ci.org/heiglandreas/password.svg?branch=master)](https://travis-ci.org/heiglandreas/password)
 [![Coverage Status](https://coveralls.io/repos/github/heiglandreas/password/badge.svg)](https://coveralls.io/github/heiglandreas/password)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/heiglandreas/password/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/heiglandreas/password/?branch=master)

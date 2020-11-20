@@ -32,9 +32,11 @@ namespace Org_Heigl\PasswordTest;
 use Closure;
 use Org_Heigl\Password\Password;
 use Org_Heigl\Password\PasswordException;
-use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use function version_compare;
+use const PASSWORD_DEFAULT;
+use const PHP_VERSION;
 
 class PasswordTest extends TestCase
 {
@@ -44,6 +46,16 @@ class PasswordTest extends TestCase
         $password = Password::createFromPlainText('test');
 
         self::assertTrue($password->shouldBeRehashed());
+    }
+
+    public function testShouldBeRehashedNew()
+    {
+        if (0 > version_compare(PHP_VERSION, '7.4.0')) {
+            self::markTestSkipped('PHP-Version too low');
+        }
+        $password = Password::createFromPlainText('test');
+
+        self::assertTrue($password->needsRehash(PASSWORD_DEFAULT));
     }
 
     public function testToString()
@@ -64,7 +76,7 @@ class PasswordTest extends TestCase
     {
         $password = Password::createFromPlainText('test');
 
-        $this->expectException(Warning::class);
+        $this->expectWarning();
         $password->getPlainTextPasswordAndYesIKnowWhatIAmDoingHere();
     }
 
@@ -86,8 +98,21 @@ class PasswordTest extends TestCase
             ORG_HEIGL_PASSWORD_PASSWORD_KEY
         );
 
-        self::assertAttributeSame($encrypted, 'password', $password);
-        self::assertAttributeSame(null, 'hash', $password);
+        $keylogger = function (Password $password) {
+            return $password->password;
+        };
+
+        $keylogger = Closure::bind($keylogger, null, $password);
+
+        $hashLogger = function (Password $password) {
+            return $password->hash;
+        };
+
+        $hashLogger = Closure::bind($hashLogger, null, $password);
+
+
+        self::assertSame($encrypted, $keylogger($password));
+        self::assertSame(null, $hashLogger($password));
     }
 
     public function testGetNewHash()
@@ -100,7 +125,7 @@ class PasswordTest extends TestCase
     {
         $password = Password::createFromPlainText('testPassword');
 
-        self::assertNotContains('testPassword', print_r($password, true));
+        self::assertStringNotContainsString('testPassword', print_r($password, true));
     }
 
     public function testDoesNotLeakPasswordThroughVarDump()
@@ -111,7 +136,7 @@ class PasswordTest extends TestCase
         var_dump($password);
         $output = ob_get_clean();
 
-        self::assertNotContains('testPassword', $output);
+        self::assertStringNotContainsString('testPassword', $output);
     }
 
     public function testDoesNotLeakPasswordThroughArrayConversion()
