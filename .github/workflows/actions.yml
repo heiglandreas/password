@@ -2,12 +2,12 @@ name: Password-Workflow
 on: [push]
 jobs:
   run:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ubuntu-latest # ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+        # operating-system: [ubuntu-latest, windows-latest, macos-latest]
         php-versions: ['7.2', '7.3', '7.4', '8.0', '8.1']
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }} # Test on ${{ matrix.operating-system }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -16,17 +16,15 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, intl
+          extensions: sodium
           ini-values: post_max_size=256M, short_open_tag=On
           coverage: xdebug
-          tools: phpunit, phpcs
-
-      - name: install
-        run: composer install
+      - name: prepare
+        run: composer update
 
       - name: test
-        run: phpunit
+        run: ./vendor/bin/phpunit
 
       - name: check
-        run: phpcs
+        run: ./vendor/bin/phpcs
 
