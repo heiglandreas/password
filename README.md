@@ -2,6 +2,7 @@
 
 An Object for passwords - Stop leaking passwords to logs or stacktraces!
 
+[![Password-Workflow](https://github.com/heiglandreas/password/workflows/Password-Workflow/badge.svg)](https://github.com/heiglandreas/password/actions)
 [![Build Status](https://travis-ci.org/heiglandreas/password.svg?branch=master)](https://travis-ci.org/heiglandreas/password)
 [![Coverage Status](https://coveralls.io/repos/github/heiglandreas/password/badge.svg)](https://coveralls.io/github/heiglandreas/password)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/heiglandreas/password/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/heiglandreas/password/?branch=master)
@@ -85,6 +86,16 @@ whether the password should be rehashed
 ```php
 $password->shouldBeRehashed();
 ```
+
+And to be able to store the password securely in a database you can retrieve the password hashed
+using
+
+```php
+$password->hash($algorithm, $options);
+```
+
+where `$argument` and `$options` are the corresponding arguments to 
+[password_hash](https://php.net/password_hash)
 
 If you **really** need to get the plaintext password the password-object was initialized with
 (f.e. for use with ```ldap_bind```) you can do that as well:

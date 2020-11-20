@@ -11,6 +11,14 @@ declare(strict_types=1);
 
 namespace Org_Heigl\Password;
 
+use function define;
+use function defined;
+use function password_hash;
+use function password_needs_rehash;
+use function version_compare;
+use const PASSWORD_DEFAULT;
+use const PHP_VERSION;
+
 final class Password
 {
     private $password;
@@ -54,7 +62,10 @@ final class Password
         );
     }
 
-    public function shouldBeRehashed(int $algorithm = PASSWORD_DEFAULT, array $options = []) : bool
+    /**
+     * @deprecated Use Password::needsRehash() instead
+     */
+    public function shouldBeRehashed($algorithm = PASSWORD_DEFAULT, array $options = []) : bool
     {
         if (null === $this->hash) {
             return true;
@@ -63,8 +74,30 @@ final class Password
         return password_needs_rehash($this->hash, $algorithm, $options);
     }
 
-    public function getNewHash(int $algorithm = PASSWORD_DEFAULT, array $options = []) : string
+    public function needsRehash(string $algorithm = PASSWORD_DEFAULT, array $options = []): bool
     {
+        if (null === $this->hash) {
+            return true;
+        }
+        if (0 < version_compare(PHP_VERSION, '7.4.0')) {
+            $algorithm = (int) $algorithm;
+        }
+        return password_needs_rehash($this->hash, $algorithm, $options);
+    }
+
+    /**
+     * @deprecated Use Password::hash() instead
+     */
+    public function getNewHash($algorithm = PASSWORD_DEFAULT, array $options = []) : string
+    {
+        return password_hash($this->getPasswordInPlainText(), $algorithm, $options);
+    }
+
+    public function hash(string $algorithm = PASSWORD_DEFAULT, array $options = []): string
+    {
+        if (0 < version_compare(PHP_VERSION, '7.4.0')) {
+            $algorithm = (int) $algorithm;
+        }
         return password_hash($this->getPasswordInPlainText(), $algorithm, $options);
     }
 
@@ -102,8 +135,6 @@ final class Password
     public function __sleep() : array
     {
         throw PasswordException::getSleepException();
-
-        return [];
     }
 
     /**
