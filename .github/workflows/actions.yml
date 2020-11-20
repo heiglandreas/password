@@ -1,3 +1,5 @@
+name: Password-Workflow
+on: [push]
 jobs:
   run:
     runs-on: ${{ matrix.operating-system }}
